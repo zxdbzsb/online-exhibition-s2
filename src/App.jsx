@@ -44,6 +44,48 @@ const sceneVisuals = {
   seen: seenVisual,
   algorithm: algorithmVisual,
 };
+const articleDetails = {
+  opening: {
+    mode: "策展開場",
+    note: "一個人也能被訊號包圍，卻不一定被誰真正接住。",
+    tags: ["半在線", "情緒展覽", "慢速閱讀"],
+  },
+  online: {
+    mode: "日常切片",
+    note: "在線不是狀態，而是一種被世界持續敲門的生活方式。",
+    tags: ["通知", "在線疲勞", "生活節奏"],
+  },
+  seen: {
+    mode: "可見性",
+    note: "被看見的次數越多，真正能說出口的自己有時反而越少。",
+    tags: ["瀏覽", "表演", "自我版本"],
+  },
+  algorithm: {
+    mode: "演算法房間",
+    note: "它替你整理喜好，也悄悄把你關進一個越來越精準的輪廓。",
+    tags: ["分類", "推薦", "回音室"],
+  },
+  read: {
+    mode: "等待介面",
+    note: "已讀不是結局，它只是把等待變成一個沒有聲音的畫面。",
+    tags: ["訊息", "沉默", "回應"],
+  },
+  socials: {
+    mode: "展覽延伸",
+    note: "社群不是出口，而是展場在不同螢幕上的回聲。",
+    tags: ["Instagram", "Threads", "LINE"],
+  },
+  podcast: {
+    mode: "聲音房間",
+    note: "有些話不適合被滑過，它們需要被聽完。",
+    tags: ["聲音", "停留", "陪伴"],
+  },
+  resources: {
+    mode: "支持地圖",
+    note: "求助不是把自己交出去，而是替自己找回一點可以呼吸的空間。",
+    tags: ["1925", "1995", "1980", "銘傳"],
+  },
+};
 
 const readMessages = [
   "你今天還好嗎？",
@@ -416,11 +458,27 @@ function Scene({ scene, index, message, setMessage }) {
 }
 
 function Copy({ scene, children, wide = false }) {
+  const article = articleDetails[scene.id];
+
   return (
-    <article className={`scene-copy ${wide ? "wide-copy" : ""}`}>
-      <p className="scene-kicker reveal">{scene.no} / {scene.kicker}</p>
+    <article className={`scene-copy ${wide ? "wide-copy" : ""}`} data-scene-no={scene.no}>
+      <div className="article-meta reveal">
+        <span>{scene.no} / {scene.kicker}</span>
+        <span>{article?.mode}</span>
+      </div>
       <h2 className="reveal">{scene.title}</h2>
       <p className="scene-text reveal">{scene.text}</p>
+      {article && (
+        <div className="article-extras reveal">
+          <div className="article-note">
+            <span>NOTE</span>
+            <p>{article.note}</p>
+          </div>
+          <div className="article-tags">
+            {article.tags.map((tag) => <span key={tag}>{tag}</span>)}
+          </div>
+        </div>
+      )}
       {children}
     </article>
   );
