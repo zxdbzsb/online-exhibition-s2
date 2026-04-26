@@ -1,0 +1,44 @@
+<svg width="780" height="270" viewBox="0 0 780 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="780" height="270" rx="0" fill="#050505"/>
+  <path d="M0 0H780V270H0V0Z" fill="url(#paint0_linear)"/>
+  <path d="M0 0H780V270H0V0Z" fill="url(#paint1_radial)" fill-opacity="0.9"/>
+  <rect x="29" y="30" width="536" height="63" rx="31.5" fill="#151817" fill-opacity="0.86" stroke="#FFF8EC" stroke-opacity="0.26" stroke-width="2"/>
+  <rect x="588" y="30" width="163" height="63" rx="31.5" fill="#151817" fill-opacity="0.86" stroke="#FFF8EC" stroke-opacity="0.26" stroke-width="2"/>
+  <text x="225" y="70" fill="#FFF8EC" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="1.5">HALF ONLINE</text>
+  <text x="612" y="70" fill="#FFF8EC" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800">音樂 ON</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" text-anchor="middle">
+    <circle cx="61" cy="149" r="32" fill="#1C2323" stroke="#FFF8EC" stroke-opacity="0.24" stroke-width="2"/>
+    <text x="61" y="160" fill="#FFF8EC" fill-opacity="0.72">00</text>
+    <circle cx="139" cy="149" r="32" fill="#FFF8EC"/>
+    <text x="139" y="160" fill="#050505">01</text>
+    <circle cx="217" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="217" y="160" fill="#FFF8EC" fill-opacity="0.62">02</text>
+    <circle cx="295" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="295" y="160" fill="#FFF8EC" fill-opacity="0.62">03</text>
+    <circle cx="373" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="373" y="160" fill="#FFF8EC" fill-opacity="0.62">04</text>
+    <circle cx="451" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="451" y="160" fill="#FFF8EC" fill-opacity="0.62">05</text>
+    <circle cx="529" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="529" y="160" fill="#FFF8EC" fill-opacity="0.62">06</text>
+    <circle cx="607" cy="149" r="32" fill="#111313" stroke="#FFF8EC" stroke-opacity="0.22" stroke-width="2"/>
+    <text x="607" y="160" fill="#FFF8EC" fill-opacity="0.62">07</text>
+  </g>
+  <path d="M0 7H98" stroke="url(#paint2_linear)" stroke-width="14"/>
+  <defs>
+    <linearGradient id="paint0_linear" x1="11" y1="22" x2="670" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#70D6FF" stop-opacity="0.22"/>
+      <stop offset="0.45" stop-color="#050505" stop-opacity="0"/>
+      <stop offset="1" stop-color="#FF7A5C" stop-opacity="0.2"/>
+    </linearGradient>
+    <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(526 205) rotate(-148.78) scale(379 219)">
+      <stop stop-color="#9DE878" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#050505" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paint2_linear" x1="0" y1="7" x2="98" y2="7" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#70D6FF"/>
+      <stop offset="0.62" stop-color="#FFF8EC"/>
+      <stop offset="1" stop-color="#FF7A5C"/>
+    </linearGradient>
+  </defs>
+</svg>
