@@ -11,6 +11,8 @@ const IG_URL = "https://www.instagram.com/half_online?igsh=cXpjbG9yaXFyNXFt";
 const THREADS_URL =
   "https://www.threads.com/@half_online?igshid=NTc4MTIwNjQ2YQ==";
 const SUPPORT_URL = "https://dep.mohw.gov.tw/DOMHAOH/fp-327-8715-107.html";
+const MCU_COUNSELING_URL =
+  "https://cpc.mcu.edu.tw/%E8%AB%AE%E5%95%86%E8%BC%94%E5%B0%8E/%E5%80%8B%E5%88%A5%E8%AB%AE%E5%95%86%E9%A0%90%E7%B4%84/";
 
 const scenes = [
   ["opening", "00", "ONLINE EXHIBITION", "在網路裡，\n卻不在身邊", "我們每天被通知、限動、訊息和演算法包圍，看起來永遠在線，實際上卻越來越難靠近彼此。"],
@@ -50,6 +52,7 @@ const resources = [
   ["安心專線 1925", "當情緒撐不住時，可以直接用市話或手機撥打 1925。", "24 小時心理支持"],
   ["生命線 1995", "面對自殺防治、危機處理或關係壓力時，可以尋求即時陪伴。", "危機與情緒支持"],
   ["張老師 1980", "當生活、關係或情緒需要被聽見時，可以找專業人員談一談。", "生活適應與情緒困擾"],
+  ["銘傳諮商輔導中心", "校內同學可依所屬校區現場預約個別諮商，讓專業老師陪你整理近況。", "校內諮商預約", MCU_COUNSELING_URL],
 ];
 
 export default function App() {
@@ -88,7 +91,7 @@ export default function App() {
 
   useEffect(() => {
     if (!opening) return undefined;
-    const title = "在網路裡，卻不在身邊";
+    const title = "在網路裡，\n卻不在身邊";
     let index = 0;
     const timer = window.setInterval(() => {
       index += 1;
@@ -100,10 +103,10 @@ export default function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 0.85,
       smoothWheel: true,
-      wheelMultiplier: 0.85,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 1.45,
+      touchMultiplier: 1.65,
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
     });
     let frame = 0;
@@ -124,7 +127,7 @@ export default function App() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const sceneEls = gsap.utils.toArray(".scene");
-      const total = (scenes.length - 1) * 1250;
+      const total = (scenes.length - 1) * 820;
 
       gsap.set(sceneEls, {
         autoAlpha: 0,
@@ -150,7 +153,7 @@ export default function App() {
           trigger: stageRef.current,
           start: "top top",
           end: () => `+=${total}`,
-          scrub: 0.85,
+          scrub: 0.55,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -292,7 +295,7 @@ export default function App() {
     const target = trigger
       ? trigger.start + (trigger.end - trigger.start) * ratio
       : (document.documentElement.scrollHeight - window.innerHeight) * ratio;
-    lenisRef.current?.scrollTo(target, { duration: 1.15 });
+    lenisRef.current?.scrollTo(target, { duration: 0.8 });
   };
 
   const enter = () => {
