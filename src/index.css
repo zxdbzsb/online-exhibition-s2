@@ -1,6 +1,6 @@
 :root {
   color: #f8f5ee;
-  background: #050505;
+  background: #0b1114;
   color-scheme: dark;
   font-family:
     -apple-system,
@@ -30,7 +30,7 @@ body,
   min-width: 320px;
   min-height: 100%;
   margin: 0;
-  background: #050505;
+  background: #0b1114;
 }
 
 html {
