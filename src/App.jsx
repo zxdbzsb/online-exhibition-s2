@@ -3,6 +3,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import heroVisual from "./assets/hero.svg";
+import algorithmVisual from "./assets/visual-algorithm.svg";
+import onlineVisual from "./assets/visual-online.svg";
+import seenVisual from "./assets/visual-seen.svg";
+import signalVisual from "./assets/visual-signal.svg";
 import "./App.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -34,6 +38,13 @@ const quotes = [
 ];
 
 const details = ["連線不是陪伴", "觀看不是理解", "回覆也不一定代表抵達"];
+const sceneVisuals = {
+  opening: signalVisual,
+  online: onlineVisual,
+  seen: seenVisual,
+  algorithm: algorithmVisual,
+};
+
 const readMessages = [
   "你今天還好嗎？",
   "剛剛突然想到你。",
@@ -384,6 +395,7 @@ function Scene({ scene, index, message, setMessage }) {
   if (scene.id === "socials") return <CardScene scene={scene} items={platforms} />;
   if (scene.id === "resources") return <CardScene scene={scene} items={resources} resource />;
   if (scene.id === "podcast") return <PodcastScene scene={scene} />;
+  const visual = sceneVisuals[scene.id] ?? heroVisual;
 
   return (
     <>
@@ -394,7 +406,7 @@ function Scene({ scene, index, message, setMessage }) {
       </Copy>
       <div className="scene-visual reveal" aria-hidden="true">
         <div className="visual-frame">
-          <img className="visual-drift" src={heroVisual} alt="" />
+          <img className="visual-drift" src={visual} alt="" />
           <div className="signal-lines"><span /><span /><span /></div>
           <p>{String(index).padStart(2, "0")}</p>
         </div>
