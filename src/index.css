@@ -81,7 +81,15 @@ canvas {
   overflow: clip;
 }
 
+.cards-grid.resources {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 820px) {
+  .cards-grid.resources {
+    grid-template-columns: 1fr;
+  }
+
   .scene-4 {
     align-content: center;
     grid-template-rows: auto auto;
@@ -99,6 +107,46 @@ canvas {
 }
 
 @media (max-width: 520px) {
+  .cards-grid.resources {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .scene-5 {
+    padding-top: calc(env(safe-area-inset-top) + 4rem);
+  }
+
+  .scene-5 .scene-copy {
+    min-height: auto;
+    justify-content: flex-start;
+  }
+
+  .scene-5 .article-extras {
+    display: none;
+  }
+
+  .scene-5 .scene-text {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .scene-5 .cards-grid {
+    gap: 0.55rem;
+    margin-top: 0.95rem;
+  }
+
+  .scene-5 .info-card {
+    min-height: 7.5rem;
+  }
+
+  .scene-5 .info-card p {
+    display: -webkit-box;
+    margin: 0.75rem 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
   .scene-4 {
     gap: 0.65rem;
     padding-top: calc(env(safe-area-inset-top) + 4rem);
@@ -157,6 +205,15 @@ canvas {
 }
 
 @media (max-width: 520px) and (max-height: 760px) {
+  .scene-5 .info-card {
+    min-height: 6.7rem;
+    padding: 0.72rem;
+  }
+
+  .scene-5 .info-card p {
+    margin: 0.48rem 0;
+  }
+
   .scene-4 {
     gap: 0.55rem;
     padding-top: calc(env(safe-area-inset-top) + 3.5rem);
