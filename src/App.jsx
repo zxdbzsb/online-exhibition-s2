@@ -11,33 +11,34 @@ import "./App.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const IG_URL = "https://www.instagram.com/half_online?igsh=cXpjbG9yaXFyNXFt";
+const IG_URL = "https://www.instagram.com/half_online?igsh=MWJ0YWprYXR0MWdscA==";
 const THREADS_URL =
   "https://www.threads.com/@half_online?igshid=NTc4MTIwNjQ2YQ==";
-const SUPPORT_URL = "https://dep.mohw.gov.tw/DOMHAOH/fp-327-8715-107.html";
+const LINE_URL = "https://line.me/R/ti/p/@144naegv";
+const TAIPEI_MENTAL_HEALTH_URL = "https://mental-health.gov.taipei/";
+const SUPPORT_URL = TAIPEI_MENTAL_HEALTH_URL;
 const MCU_COUNSELING_URL =
-  "https://cpc.mcu.edu.tw/%E8%AB%AE%E5%95%86%E8%BC%94%E5%B0%8E/%E5%80%8B%E5%88%A5%E8%AB%AE%E5%95%86%E9%A0%90%E7%B4%84/";
+  "https://cpc.mcu.edu.tw/%E8%AB%AE%E5%95%86%E8%BC%94%E5%B0%8E%E4%B8%AD%E5%BF%83/";
 
 const scenes = [
-  ["opening", "00", "ONLINE EXHIBITION", "在網路裡，\n卻不在身邊", "我們每天被通知、限動、訊息和演算法包圍，看起來永遠在線，實際上卻越來越難靠近彼此。"],
-  ["online", "01", "ALWAYS ON", "你在線上", "早上醒來先看通知，通勤時回覆訊息，睡前再確認一次社群。手指很忙，心卻常常停在原地。"],
-  ["seen", "02", "SEEN BY EVERYONE", "你被看見", "讚數、瀏覽、回覆、截圖，讓存在變得可以被量化。可是被看見的你，可能只是一個被整理過的版本。"],
-  ["algorithm", "03", "SORTED FEELINGS", "你被分類", "系統比你更快替你命名：偏好、興趣、相似受眾、可能喜歡。你越是停留，它越懂你的輪廓。"],
-  ["read", "04", "READ, NO REPLY", "已讀，不回", "這裡只有你送出的訊息，和一個冷冷的已讀。不是所有沉默都代表拒絕，但每一次等待都會留下重量。"],
-  ["socials", "05", "OFFICIAL CHANNELS", "官方平台", "展覽的延伸散落在不同平台。每一次觀看、停留與互動，都是這場線上策展的一部分。"],
-  ["podcast", "06", "LISTENING ROOM", "Podcast", "有些情緒無法被畫面完整承接，於是它們轉化成聲音。這裡收納那些更慢、更深的說話方式。"],
-  ["resources", "07", "SUPPORT", "心理資源", "如果孤單已經影響到情緒與生活，求助不是脆弱，而是把自己重新接回來的一種方式。"],
+  ["opening", "00", "ONLINE EXHIBITION", "不是沒有人在，\n只是沒有人靠近。", "我們每天活在通知、訊息、限動與演算法裡。看起來永遠在線，實際上卻越來越習慣沉默。《在線，但不在身邊》想談的，不只是孤單，而是這個時代的連結方式。"],
+  ["online", "01", "ALWAYS ON", "你在線", "早上醒來看通知，課堂中回訊息，午餐刷短影片，晚上睡前再看一次社群。你的手很忙，心卻很靜。"],
+  ["seen", "02", "SEEN BY EVERYONE", "你被看見", "限動被看過，貼文被按讚，聊天室一直跳通知。可是當你真的難過時，那些互動突然都變得很薄。"],
+  ["algorithm", "03", "SORTED FEELINGS", "你被分類", "演算法總是比你更快定義你。今天的你，被系統歸類成什麼樣的人？"],
+  ["read", "04", "READ, NO REPLY", "已讀，不回", "這裡只有你發出的訊息，和一個冷冷的已讀。"],
+  ["socials", "05", "OFFICIAL CHANNELS", "官方平台", "展覽的延伸敘事散落在不同平台。每一次觀看、停留與互動，都是這場策展的一部分。"],
+  ["podcast", "06", "LISTENING ROOM", "聆聽 Podcast", "有些情緒無法被畫面完整承接，於是它們轉化成聲音。這裡收納那些更慢、更深的說話方式。"],
+  ["resources", "07", "SUPPORT", "如果你真的很累", "你不需要一個人撐著。當孤單已經影響到情緒與生活，求助不是脆弱，而是照顧自己。"],
 ].map(([id, no, kicker, title, text]) => ({ id, no, kicker, title, text }));
 
 const quotes = [
   "我們不是沒有被看見，只是很少被真正理解。",
   "有些孤單不是沒有人陪，而是沒有人靠近你真正的情緒。",
-  "你每天都在線上，卻不一定停留在任何人的心裡。",
-  "訊息很多，能承接你的心情的人很少。",
-  "如果今天只剩下一點力氣，請先把它留給自己。",
+  "你每天都在線，卻不一定在任何人的心裡停留。",
+  "訊息很多，能承接你的人很少。",
 ];
 
-const details = ["連線不是陪伴", "觀看不是理解", "回覆也不一定代表抵達"];
+const details = ["被看見，不等於被理解", "被點開，不等於被接住", "更多訊息，不等於連結"];
 const sceneVisuals = {
   opening: signalVisual,
   online: onlineVisual,
@@ -47,23 +48,23 @@ const sceneVisuals = {
 const articleDetails = {
   opening: {
     mode: "策展開場",
-    note: "一個人也能被訊號包圍，卻不一定被誰真正接住。",
+    note: "這是一段緩慢經過的情緒路徑。向下翻頁，重新感受那些在線卻不靠近的時刻。",
     tags: ["半在線", "情緒展覽", "慢速閱讀"],
   },
   online: {
     mode: "日常切片",
-    note: "在線不是狀態，而是一種被世界持續敲門的生活方式。",
-    tags: ["通知", "在線疲勞", "生活節奏"],
+    note: "在線不是陪伴本身，有時候只是手指很忙，心卻很靜。",
+    tags: ["通知", "課堂", "短影片"],
   },
   seen: {
     mode: "可見性",
-    note: "被看見的次數越多，真正能說出口的自己有時反而越少。",
-    tags: ["瀏覽", "表演", "自我版本"],
+    note: "被看見，不等於被理解。被點開，不等於被接住。",
+    tags: ["限動", "按讚", "互動"],
   },
   algorithm: {
     mode: "演算法房間",
-    note: "它替你整理喜好，也悄悄把你關進一個越來越精準的輪廓。",
-    tags: ["分類", "推薦", "回音室"],
+    note: "今天的你，被系統歸類成什麼樣的人？",
+    tags: ["安靜", "已讀不回", "看起來很好"],
   },
   read: {
     mode: "等待介面",
@@ -77,35 +78,32 @@ const articleDetails = {
   },
   podcast: {
     mode: "聲音房間",
-    note: "有些話不適合被滑過，它們需要被聽完。",
+    note: "請戴上耳機，在一段不必急著回覆的時間裡，聽見那些被留在訊息之外的情緒。",
     tags: ["聲音", "停留", "陪伴"],
   },
   resources: {
     mode: "支持地圖",
-    note: "求助不是把自己交出去，而是替自己找回一點可以呼吸的空間。",
-    tags: ["1925", "1995", "1980", "銘傳"],
+    note: "你不需要一個人撐著。求助不是脆弱，而是照顧自己。",
+    tags: ["臺北市", "銘傳大學"],
   },
 };
 
 const readMessages = [
   "你今天還好嗎？",
-  "剛剛突然想到你。",
+  "剛剛想到你。",
   "如果你想說，我在。",
   "最近是不是很累？",
-  "我沒有要你馬上回，只是想讓你知道有人在。",
 ];
 
 const platforms = [
-  ["Instagram", "以視覺碎片、展覽更新與情緒片段延伸策展敘事。", "前往 IG", IG_URL],
-  ["Threads", "以短句、討論與留言回聲延伸展覽中的共同感受。", "前往 Threads", THREADS_URL],
-  ["LINE", "作為提醒、陪伴與展期互動的延伸入口。", "連結待加入", ""],
+  ["Instagram", "以視覺碎片與情緒片段延伸展覽敘事。", "前往 IG", IG_URL],
+  ["Threads", "以文字與片段情緒延續展覽中的討論與共鳴。", "前往 Threads", THREADS_URL],
+  ["LINE", "作為提醒、陪伴與展期互動的延伸入口。", "前往 LINE", LINE_URL],
 ];
 
 const resources = [
-  ["安心專線 1925", "當情緒撐不住時，可以直接用市話或手機撥打 1925。", "24 小時心理支持"],
-  ["生命線 1995", "面對自殺防治、危機處理或關係壓力時，可以尋求即時陪伴。", "危機與情緒支持"],
-  ["張老師 1980", "當生活、關係或情緒需要被聽見時，可以找專業人員談一談。", "生活適應與情緒困擾"],
-  ["銘傳諮商輔導中心", "校內同學可依所屬校區現場預約個別諮商，讓專業老師陪你整理近況。", "校內諮商預約", MCU_COUNSELING_URL],
+  ["臺北市心理衛生中心", "提供心理健康資訊、資源與相關協助窗口。", "前往網站", TAIPEI_MENTAL_HEALTH_URL],
+  ["銘傳大學諮商輔導中心", "可進一步了解校內諮商與輔導相關資源。", "前往網站", MCU_COUNSELING_URL],
 ];
 
 export default function App() {
@@ -144,7 +142,7 @@ export default function App() {
 
   useEffect(() => {
     if (!opening) return undefined;
-    const title = "在網路裡，\n卻不在身邊";
+    const title = "在線，但不在身邊";
     let index = 0;
     const timer = window.setInterval(() => {
       index += 1;
@@ -533,7 +531,7 @@ function PodcastScene({ scene }) {
           {Array.from({ length: 24 }).map((_, index) => <span key={index} style={{ "--delay": `${index * 0.05}s` }} />)}
         </div>
         <h3>聲音篇章</h3>
-        <p>把無法即時回覆的情緒，留給一段可以慢慢聽完的時間。</p>
+        <p>請戴上耳機，在一段不必急著回覆的時間裡，聽見那些被留在訊息之外的情緒。</p>
         <button type="button" disabled>即將上線</button>
       </div>
     </>
