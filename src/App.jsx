@@ -106,6 +106,74 @@ const resources = [
   ["銘傳大學諮商輔導中心", "可進一步了解校內諮商與輔導相關資源。", "前往網站", MCU_COUNSELING_URL],
 ];
 
+const moodOptions = [
+  {
+    id: "quiet",
+    label: "安靜",
+    title: "低頻在線",
+    copy: "今天不想解釋太多，只想被溫柔地放著。",
+    level: "38%",
+    color: "#70d6ff",
+  },
+  {
+    id: "seen",
+    label: "被看見",
+    title: "訊號過曝",
+    copy: "很多人滑過你，但真正停下來的人很少。",
+    level: "62%",
+    color: "#ffb26b",
+  },
+  {
+    id: "waiting",
+    label: "等回覆",
+    title: "已讀懸浮",
+    copy: "你知道對方看見了，卻不知道自己該停在哪裡。",
+    level: "74%",
+    color: "#ff7a5c",
+  },
+  {
+    id: "held",
+    label: "需要被接住",
+    title: "靠近一點",
+    copy: "不是想被拯救，只是希望有人願意聽完。",
+    level: "86%",
+    color: "#9de878",
+  },
+];
+
+const defaultNotes = [
+  { id: "seed-1", text: "我也常常在線，但不知道要找誰。", tone: "quiet" },
+  { id: "seed-2", text: "已讀有時候比沒收到還重。", tone: "waiting" },
+  { id: "seed-3", text: "希望今天有人真的聽見我。", tone: "held" },
+];
+
+const feedPosts = [
+  {
+    title: "限動碎片 01",
+    meta: "IG / VISUAL NOTE",
+    caption: "一個人在線的時候，畫面很亮，心裡卻像被調成靜音。",
+    visual: onlineVisual,
+    tone: "blue",
+    tags: ["#在線", "#通知", "#半透明"],
+  },
+  {
+    title: "展覽貼文 02",
+    meta: "IG / EXHIBITION POST",
+    caption: "被看見不等於被理解。按讚像光點，卻不一定能照進真正的情緒。",
+    visual: seenVisual,
+    tone: "amber",
+    tags: ["#被看見", "#限動", "#理解"],
+  },
+  {
+    title: "互動回聲 03",
+    meta: "IG / AUDIENCE ECHO",
+    caption: "把一則沒有署名的留言放進展場，讓沉默也有形狀。",
+    visual: signalVisual,
+    tone: "green",
+    tags: ["#匿名留言", "#已讀不回", "#回聲"],
+  },
+];
+
 export default function App() {
   const appRef = useRef(null);
   const stageRef = useRef(null);
@@ -123,6 +191,17 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [musicOn, setMusicOn] = useState(false);
   const [message, setMessage] = useState(readMessages[0]);
+  const [selectedMoodId, setSelectedMoodId] = useState(moodOptions[0].id);
+  const [noteDraft, setNoteDraft] = useState("");
+  const [visitorNotes, setVisitorNotes] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem("half-online-notes");
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) && parsed.length ? parsed.slice(-6) : defaultNotes;
+    } catch {
+      return defaultNotes;
+    }
+  });
 
   const dateLabel = useMemo(
     () =>
@@ -277,6 +356,14 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("half-online-notes", JSON.stringify(visitorNotes.slice(-6)));
+    } catch {
+      // Local persistence is optional; the interaction still works without it.
+    }
+  }, [visitorNotes]);
+
   const playNote = (ctx, frequency, start, duration, volume) => {
     if (!gainRef.current) return;
     const oscillator = ctx.createOscillator();
@@ -362,6 +449,21 @@ export default function App() {
     scrollToScene(0);
   };
 
+  const submitNote = (event) => {
+    event.preventDefault();
+    const text = noteDraft.trim();
+    if (!text) return;
+    setVisitorNotes((current) => [
+      ...current,
+      {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        text: text.slice(0, 42),
+        tone: selectedMoodId,
+      },
+    ].slice(-6));
+    setNoteDraft("");
+  };
+
   return (
     <div className="app" ref={appRef}>
       {loading && <div className="loader"><span>ONLINE BUT DISTANT</span></div>}
@@ -396,7 +498,18 @@ export default function App() {
         </div>
         {scenes.map((scene, index) => (
           <section className={`scene scene-${index}`} key={scene.id}>
-            <Scene scene={scene} index={index} message={message} setMessage={setMessage} />
+            <Scene
+              scene={scene}
+              index={index}
+              message={message}
+              setMessage={setMessage}
+              selectedMoodId={selectedMoodId}
+              setSelectedMoodId={setSelectedMoodId}
+              visitorNotes={visitorNotes}
+              noteDraft={noteDraft}
+              setNoteDraft={setNoteDraft}
+              onSubmitNote={submitNote}
+            />
           </section>
         ))}
       </main>
@@ -430,9 +543,35 @@ function Opening({ dateLabel, quote, typed, onEnter, onRandomQuote }) {
   );
 }
 
-function Scene({ scene, index, message, setMessage }) {
-  if (scene.id === "read") return <ReadScene scene={scene} message={message} setMessage={setMessage} />;
-  if (scene.id === "socials") return <CardScene scene={scene} items={platforms} />;
+function Scene({
+  scene,
+  index,
+  message,
+  setMessage,
+  selectedMoodId,
+  setSelectedMoodId,
+  visitorNotes,
+  noteDraft,
+  setNoteDraft,
+  onSubmitNote,
+}) {
+  if (scene.id === "algorithm") {
+    return <MoodScene scene={scene} selectedMoodId={selectedMoodId} setSelectedMoodId={setSelectedMoodId} />;
+  }
+  if (scene.id === "read") {
+    return (
+      <ReadScene
+        scene={scene}
+        message={message}
+        setMessage={setMessage}
+        visitorNotes={visitorNotes}
+        noteDraft={noteDraft}
+        setNoteDraft={setNoteDraft}
+        onSubmitNote={onSubmitNote}
+      />
+    );
+  }
+  if (scene.id === "socials") return <SocialScene scene={scene} />;
   if (scene.id === "resources") return <CardScene scene={scene} items={resources} resource />;
   if (scene.id === "podcast") return <PodcastScene scene={scene} />;
   const visual = sceneVisuals[scene.id] ?? heroVisual;
@@ -450,6 +589,41 @@ function Scene({ scene, index, message, setMessage }) {
           <div className="signal-lines"><span /><span /><span /></div>
           <p>{String(index).padStart(2, "0")}</p>
         </div>
+      </div>
+    </>
+  );
+}
+
+function MoodScene({ scene, selectedMoodId, setSelectedMoodId }) {
+  const selectedMood = moodOptions.find((mood) => mood.id === selectedMoodId) ?? moodOptions[0];
+
+  return (
+    <>
+      <Copy scene={scene}>
+        <div className="mood-picker reveal" role="group" aria-label="選擇今天的狀態">
+          {moodOptions.map((mood) => (
+            <button
+              type="button"
+              key={mood.id}
+              className={mood.id === selectedMoodId ? "active" : ""}
+              style={{ "--mood": mood.color }}
+              onClick={() => setSelectedMoodId(mood.id)}
+            >
+              {mood.label}
+            </button>
+          ))}
+        </div>
+      </Copy>
+      <div className="mood-orbit reveal" style={{ "--mood": selectedMood.color }}>
+        <div className="mood-orbit-visual" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <p>{selectedMood.title}</p>
+        <h3>{selectedMood.label}</h3>
+        <small>{selectedMood.copy}</small>
+        <div className="mood-meter" aria-hidden="true"><span style={{ width: selectedMood.level }} /></div>
       </div>
     </>
   );
@@ -482,19 +656,75 @@ function Copy({ scene, children, wide = false }) {
   );
 }
 
-function ReadScene({ scene, message, setMessage }) {
+function ReadScene({ scene, message, setMessage, visitorNotes, noteDraft, setNoteDraft, onSubmitNote }) {
   return (
     <>
       <Copy scene={scene} />
-      <div className="message-panel reveal">
-        <div className="message-topline"><span>HALF ONLINE</span><span>now</span></div>
-        <div className="message-bubble">{message}</div>
-        <div className="read-receipt">已讀</div>
-        <button type="button" onClick={() => setMessage(readMessages[Math.floor(Math.random() * readMessages.length)])}>
-          換一句訊息
-        </button>
+      <div className="read-interaction reveal">
+        <div className="message-panel">
+          <div className="message-topline"><span>HALF ONLINE</span><span>now</span></div>
+          <div className="message-bubble">{message}</div>
+          <div className="read-receipt">已讀</div>
+          <button type="button" onClick={() => setMessage(readMessages[Math.floor(Math.random() * readMessages.length)])}>
+            換一句訊息
+          </button>
+        </div>
+        <form className="anonymous-panel" onSubmit={onSubmitNote}>
+          <div className="message-topline"><span>匿名留言</span><span>{String(visitorNotes.length).padStart(2, "0")}</span></div>
+          <div className="note-stream">
+            {visitorNotes.slice(-4).map((note) => (
+              <span className={`note-chip tone-${note.tone}`} key={note.id}>{note.text}</span>
+            ))}
+          </div>
+          <div className="note-compose">
+            <input
+              type="text"
+              value={noteDraft}
+              maxLength={42}
+              placeholder="留下一句沒有署名的話"
+              onChange={(event) => setNoteDraft(event.target.value)}
+            />
+            <button type="submit" disabled={!noteDraft.trim()}>送出</button>
+          </div>
+        </form>
       </div>
     </>
+  );
+}
+
+function SocialScene({ scene }) {
+  return (
+    <Copy scene={scene} wide>
+      <div className="social-lab reveal">
+        <div className="feed-wall">
+          {feedPosts.map((post, index) => (
+            <a className={`feed-card tone-${post.tone}`} href={IG_URL} target="_blank" rel="noreferrer" key={post.title}>
+              <div className="feed-media">
+                <img src={post.visual} alt="" />
+                <span>{String(index + 1).padStart(2, "0")}</span>
+              </div>
+              <div className="feed-copy">
+                <small>{post.meta}</small>
+                <h3>{post.title}</h3>
+                <p>{post.caption}</p>
+                <div>
+                  {post.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div className="platform-strip">
+          {platforms.map(([name, text, label, href]) => (
+            <a href={href} target="_blank" rel="noreferrer" key={name}>
+              <span>{name}</span>
+              <p>{text}</p>
+              <strong>{label}</strong>
+            </a>
+          ))}
+        </div>
+      </div>
+    </Copy>
   );
 }
 
