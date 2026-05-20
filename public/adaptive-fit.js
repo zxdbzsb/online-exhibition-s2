@@ -1,13 +1,20 @@
 (() => {
+  const isLocalHost = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
+  const audioBasePath = !isLocalHost && location.pathname.includes("/online-exhibition-s2/")
+    ? "/online-exhibition-s2/audio/"
+    : "/audio/";
+
   const episodes = [
     {
       label: "Podcast 上集",
-      note: "關於在線、孤單與被看見的前半段",
+      note: "AI 的那些二三事：我們習慣遠距離，AI 總是身不由己",
+      audio: `${audioBasePath}podcast-upper.mp3`,
       url: "https://youtu.be/ygikUJSXr8k?si=SWZMIUeiPifUnc8o",
     },
     {
       label: "Podcast 下集",
-      note: "把沉默、回應與求助繼續說完",
+      note: "它才不是 AI，它是我的摯愛知己親朋手足",
+      audio: `${audioBasePath}podcast-lower.mp3`,
       url: "https://youtu.be/cwp6rRNKGiI?si=gjjjkoijZV2PfGYn",
     },
   ];
@@ -44,6 +51,39 @@
     };
   };
 
+  const createEpisodeCard = (episode, index) => {
+    const card = document.createElement("article");
+    card.className = "podcast-audio-card";
+
+    const heading = document.createElement("h4");
+    heading.textContent = `${String(index + 1).padStart(2, "0")} / ${episode.label}`;
+
+    const note = document.createElement("p");
+    note.textContent = episode.note;
+
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "metadata";
+    audio.src = episode.audio;
+    audio.setAttribute("aria-label", episode.label);
+
+    const fallback = document.createElement("a");
+    fallback.href = episode.url;
+    fallback.target = "_blank";
+    fallback.rel = "noreferrer";
+    fallback.textContent = "在 YouTube 開啟";
+
+    audio.addEventListener("loadedmetadata", scheduleFit);
+    audio.addEventListener("error", () => {
+      card.classList.add("missing-audio");
+      fallback.textContent = "音檔未載入，先在 YouTube 開啟";
+      scheduleFit();
+    });
+
+    card.append(heading, note, audio, fallback);
+    return card;
+  };
+
   const enhancePodcast = () => {
     const panel = document.querySelector(".scene-6 .podcast-panel");
     if (!panel || panel.dataset.podcastReady === "true") return;
@@ -51,21 +91,12 @@
     const oldButton = panel.querySelector("button");
     if (oldButton) oldButton.hidden = true;
 
-    const links = document.createElement("div");
-    links.className = "podcast-links";
-    links.setAttribute("aria-label", "Podcast 集數");
+    const list = document.createElement("div");
+    list.className = "podcast-audio-list";
+    list.setAttribute("aria-label", "Podcast 集數");
+    episodes.forEach((episode, index) => list.appendChild(createEpisodeCard(episode, index)));
 
-    episodes.forEach((episode, index) => {
-      const link = document.createElement("a");
-      link.className = "podcast-link";
-      link.href = episode.url;
-      link.target = "_blank";
-      link.rel = "noreferrer";
-      link.innerHTML = `<span>${episode.label}<small>${episode.note}</small></span><strong>${String(index + 1).padStart(2, "0")} / YouTube</strong>`;
-      links.appendChild(link);
-    });
-
-    panel.appendChild(links);
+    panel.appendChild(list);
     panel.dataset.podcastReady = "true";
   };
 
