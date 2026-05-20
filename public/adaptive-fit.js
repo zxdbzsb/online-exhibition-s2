@@ -1,8 +1,8 @@
 (() => {
   const isLocalHost = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
-  const audioBasePath = !isLocalHost && location.pathname.includes("/online-exhibition-s2/")
-    ? "/online-exhibition-s2/audio/"
-    : "/audio/";
+  const audioBasePath = isLocalHost
+    ? "/audio/"
+    : "https://raw.githubusercontent.com/zxdbzsb/online-exhibition-s2/main/";
 
   const episodes = [
     {
